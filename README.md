@@ -26,22 +26,22 @@ YC, Terraform, Kubernetes, Helm, HelmWave, Brew(for MacOs). Развертыва
 - Network - Поднимает сеть, днс, статический айпи, группы безопасности. Переменные вынесены в файл (необходимые для настройки отмечены) terraform.tfvars
 - terraform apply
 - K8S - Поднимает кластер. Аналогично сетям настраиваем terraform.tfvars
-        terraform apply 
+- terraform apply 
 - MySQL - Поднимает кластер MySql. Аналогично сетям настраиваем terraform.tfvars
-        terraform apply
+- terraform apply
 
 Подключаемся к K8s кластеру:
 yc managed-kubernetes cluster get-credentials --id <id cluster kubernetes> --external
 
 Хелм чарты:
-    1. Задать нужные значения в файлах values/values.*.yaml
-    2. Подготовить Helmwave к деплою командой:
-        helmwave build
-    3. Деплой:
-        helmwave up
+- Задать нужные значения в файлах values/values.*.yaml
+- Подготовить Helmwave к деплою командой:
+- helmwave build
+- Деплой:
+- helmwave up
 
 Сертификат:
-    kubectl apply -f certificate.yaml
+- kubectl apply -f certificate.yaml
 
 
 ToDo: 
