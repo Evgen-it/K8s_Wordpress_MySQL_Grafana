@@ -22,12 +22,12 @@ YC, Terraform, Kubernetes, Helm, HelmWave, Brew(for MacOs). Развертыва
 
 
 Инфраструктура:
-    Для хранения tf state я использовал S3 bucket cозданный так же в Yandex Cloud. Бэкенд нужно настроить в файлах main.tf
-    - Network - Поднимает сеть, днс, статический айпи, группы безопасности. Переменные вынесены в файл (необходимые для настройки отмечены) terraform.tfvars
-        terraform apply
-    2. K8S - Поднимает кластер. Аналогично сетям настраиваем terraform.tfvars
+- Для хранения tf state я использовал S3 bucket cозданный так же в Yandex Cloud. Бэкенд нужно настроить в файлах main.tf
+- Network - Поднимает сеть, днс, статический айпи, группы безопасности. Переменные вынесены в файл (необходимые для настройки отмечены) terraform.tfvars
+- terraform apply
+- K8S - Поднимает кластер. Аналогично сетям настраиваем terraform.tfvars
         terraform apply 
-    3. MySQL - Поднимает кластер MySql. Аналогично сетям настраиваем terraform.tfvars
+- MySQL - Поднимает кластер MySql. Аналогично сетям настраиваем terraform.tfvars
         terraform apply
 
 Подключаемся к K8s кластеру:
