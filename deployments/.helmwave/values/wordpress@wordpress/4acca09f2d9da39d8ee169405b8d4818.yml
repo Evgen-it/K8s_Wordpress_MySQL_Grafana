@@ -1,0 +1,22 @@
+---
+replicaCount: 3
+wordpressScheme: https
+wordpressUsername: user
+wordpressPassword: "shiTee3aew!"
+service:
+  type: NodePort
+ingress:
+  enabled: true
+  hostname: wp.filit.fun
+  tls: true
+  selfSigned: true
+  ingressClassName: "nginx"
+mariadb:
+  ## To use an external database set this to false and configure the `externalDatabase.*` parameters
+  enabled: false
+externalDatabase:
+  host: rc1a-vz8xzmrv7oxeo6wn.mdb.yandexcloud.net
+  port: 3306
+  user: evgen
+  password: "12345678"
+  database: one_of_one

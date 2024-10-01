@@ -1,0 +1,13 @@
+---
+namespaceOverride: "default"
+controller:
+  kind: DaemonSet
+  metrics:
+    enabled: true
+  service:
+    externalTrafficPolicy: Local
+    loadBalancerIP: 89.169.128.58         #static external ip of network load balancer
+  #admissionWebhooks:
+    #enabled: false
+  config:
+    force-ssl-redirect: true

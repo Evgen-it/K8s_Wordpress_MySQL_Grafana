@@ -1,0 +1,6 @@
+config:
+    folder_id: b1gqlm96s1bedr3p9nu1
+    email: example@mail.com                                #email for cert-manager
+    server: https://acme-v02.api.letsencrypt.org/directory  # testing: https://acme-staging-v02.api.letsencrypt.org/directory
+    auth:
+        json: key.json | {}

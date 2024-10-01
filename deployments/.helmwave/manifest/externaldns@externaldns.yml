@@ -1,0 +1,107 @@
+---
+# Source: externaldns/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: externaldns
+  namespace: "externaldns"
+  labels:
+    helm.sh/chart: externaldns-0.5.1
+    app.kubernetes.io/name: externaldns
+    app.kubernetes.io/instance: externaldns
+    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/managed-by: Helm
+---
+# Source: externaldns/templates/secret.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: externaldns
+  namespace: "externaldns"
+  labels:
+    helm.sh/chart: externaldns-0.5.1
+    app.kubernetes.io/name: externaldns
+    app.kubernetes.io/instance: externaldns
+    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/managed-by: Helm
+type: Opaque
+data:
+  "iamkeyfile.json": ewogICAgImlkIjogImFqZXFycmxsMGExcGJ1cGkxcTVyIiwKICAgICJzZXJ2aWNlX2FjY291bnRfaWQiOiAiYWplYWg0cWRvYjB1OWc3Z2o4cTMiLAogICAgImNyZWF0ZWRfYXQiOiAiMjAyNC0xMC0wMVQwOTo1ODoxOC41OTkyMTMxNDlaIiwKICAgICJrZXlfYWxnb3JpdGhtIjogIlJTQV8yMDQ4IiwKICAgICJwdWJsaWNfa2V5IjogIi0tLS0tQkVHSU4gUFVCTElDIEtFWS0tLS0tXG5NSUlCSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQXZlanB2N2lZdEtLYXp5T1MxNlJIXG54UlA4Vlc4VndKUEl3TloxYTcxeHl0V0ZtR1gwV1JzZVFvek9EYmUvWVN6bFNVZkE2ZmZRVWVPNjJHK2d0VUdBXG5sdFBhTS8zdE43ZzVGakpCTHpvU2VkUUJIc0lXU3ZxazkwMFF4WENGcnRZV2hZcHdlRUlVREVZdGVhWnQxd2xkXG44aUh1ZE1GcXFNV3lBUzZLandwVWI2Wm44aCt0OVpJNVBxak9WSTg2UjNBdDNVZkp1c2R0N2lEQTZWWVRxOS9tXG40TFBKVStEY3pDdE02Rm1nSXpZOEhCQjJ1OVRqM2VRTk9QMDA5TFYycjhqNVFkVTl5MkF1d3d2L2xOczRLdnpXXG5mQXluUHo4ZHNNZ2RHOHNXK1Q5c0pTNUxMaEVRbzZ6alcwUnByVUoxRlAyd2RPTDZqZlg0cWx3cXdSQ2NqQmduXG5Cd0lEQVFBQlxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4iLAogICAgInByaXZhdGVfa2V5IjogIlBMRUFTRSBETyBOT1QgUkVNT1ZFIFRISVMgTElORSEgWWFuZGV4LkNsb3VkIFNBIEtleSBJRCBcdTAwM2NhamVxcnJsbDBhMXBidXBpMXE1clx1MDAzZVxuLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tXG5NSUlFdlFJQkFEQU5CZ2txaGtpRzl3MEJBUUVGQUFTQ0JLY3dnZ1NqQWdFQUFvSUJBUUM5Nk9tL3VKaTBvcHJQXG5JNUxYcEVmRkUveFZieFhBazhqQTFuVnJ2WEhLMVlXWVpmUlpHeDVDak00TnQ3OWhMT1ZKUjhEcDk5QlI0N3JZXG5iNkMxUVlDVzA5b3ovZTAzdURrV01rRXZPaEo1MUFFZXdoWksrcVQzVFJERmNJV3UxaGFGaW5CNFFoUU1SaTE1XG5wbTNYQ1YzeUllNTB3V3FveGJJQkxvcVBDbFJ2cG1meUg2MzFramsrcU01VWp6cEhjQzNkUjhtNngyM3VJTURwXG5WaE9yMytiZ3M4bFQ0TnpNSzB6b1dhQWpOandjRUhhNzFPUGQ1QTA0L1RUMHRYYXZ5UGxCMVQzTFlDN0RDLytVXG4yemdxL05aOERLYy9QeDJ3eUIwYnl4YjVQMndsTGtzdUVSQ2pyT05iUkdtdFFuVVUvYkIwNHZxTjlmaXFYQ3JCXG5FSnlNR0NjSEFnTUJBQUVDZ2dFQUhEOU1wV3U3cXdLVXJFTEtVTERxeS9HUkV0UVhGREhuSm1lL3gyckNSajFFXG5SY3JFY1l5TEQ3TUo0eGgxcXVxV29EUEFDZzBHTzJmNEhzRmIwaG9RR2w4Z2thTXZhWjVKUDNmeUlpZ3RIMW5kXG5ZTW5WcndsaENEZTZTdVBWdm8reGdlTjVueW1VK2M1bWJUWElHTGdYOVMvKzIvYjQrbW1OZEllTHJJTUkxQ0pXXG5OM0tqdW03QmhRK3ZDQkZzRjkvR1A1Mll1cTRrZmV6eEFhMzRIVWxpeWdIZ05odE1scHhIbVpvYVM5VlhmSDI1XG5JL00vMkNwazZwU01YUFU3dzhXb0F4UU5LcjB2R0hRcjhJbTBQWEkvYXNCUEN1angxY29xbzY4M0RGUFVQNWR3XG41Z2tYa3pEbnBsZ0MzdVhYRldSYlBJZEZSMWJmeThVWTA5dWJxWWhqWVFLQmdRRDVBOFBEc29jak1Pd0M3d3plXG5vSmZnckFIQ2psMHhGKzRaa1FxZGxnS1ZsV3IvaEpZa1d0RW5nbHAvRVNWM1J4QVVHQVlSY3V5MXRTWm02MEF3XG5WaG0yQ0JjSHFWb2swSXFwUkhHQUFuOEwrT0VSVk8rNzRZbzBOK3NjcEw5bTRNWlRobUQ1bllVaTZseElacGJ2XG5HV29uSWhkemZiT25FbFRpTStHOXJBdy8zUUtCZ1FERFBMT21zRG9tQnBBS3Z4cEFnL2tGUUV5akRtYXdFbG90XG44bElqSGgrMGxHRTB2NHd5KzVKSnpPWHJwOTlQUEhEeit6SnBmYlg1WGZ2UEp5VC84VHI3Sk5aQ3hUU0d6aTJhXG5ybU1VdWlCaHBpaDkvQ3NmQ0dNd3NaMFltSDYrc05LdXRxaEdMc3ZDeFpWdEN6SFRvZnhiWlFIbEF4L0g2YUJ0XG5NQm1QQW1WR013S0JnQVhIZVpha0lSREhCT000aXhMcnBUcTRvejNSc2dYK3FTNzh0OE5haE9yVjBlcm1OOW5XXG5KYjZGL3ZXdC96R2FlNXdMeHJCRys0bG9EK0VabXA3RWtNb3h1OThZcGhmdW94azBsbkhESFJHNUQvZ29BWHhaXG55cXhWaytaUlNJUHB1WkNjc01sNlIybTlDTEZCZUVWS1VMVmh6Q3VKQWs5aFZJai9iVURLcW1vZEFvR0FjampqXG5TaFEwRU9jcUFuK0hsbE1mcjRqTXpXQ3hoelZWZVNnYUVkMmY0d0FrVnIzeUFpbllqa0RJQ3pUdG11ZmJsWUpUXG5IaENrRkQ1K0FkWCsrWlppVVdoZHlqYWg0blJoamV1VW9CMjhzQ1NMOEJsR0NTUFpGRFgxbU53dTJ0V01qUmJrXG5JQnRrcnBEMk9ST2hsUlZpRlA1bE8xeTJqVGtMMkpXWmZtZUNaSzBDZ1lFQXQ0dWJEaFR3SzhrODlBNTlGTys2XG44VkZsZk5ydEJrM3hpaDZHbjBRVmt1QkV1bWF6dVY5cnZYeHhvcGlCWmR3SWRQVHk0OXlXaC9RL29nSi9jQk94XG5JZmd1VHh1SWg3T3kyb2lnWDFTQ2o4dDNoc1BrM2NES0t0TTVyR2VjanpTRU4vNG9zRDdySFFiOTlQdHIxUjRNXG5RL2VzWnVGblhPN3JBaGNuOENqNUVxMD1cbi0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS1cbiIKfQ==
+---
+# Source: externaldns/templates/serviceaccount.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name:  externaldns
+rules:
+  - apiGroups: [""]
+    resources: ["services","endpoints","pods"]
+    verbs: ["get","watch","list"]
+  - apiGroups: ["extensions","networking.k8s.io"]
+    resources: ["ingresses"]
+    verbs: ["get","watch","list"]
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["list"]
+---
+# Source: externaldns/templates/serviceaccount.yaml
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name:  externaldns-viewer
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: externaldns
+subjects:
+  - kind: ServiceAccount
+    name:  externaldns
+    namespace: externaldns
+---
+# Source: externaldns/templates/deploy.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: externaldns
+  namespace: externaldns
+  labels:
+    helm.sh/chart: externaldns-0.5.1
+    app.kubernetes.io/name: externaldns
+    app.kubernetes.io/instance: externaldns
+    app.kubernetes.io/version: "0.5.1"
+    app.kubernetes.io/managed-by: Helm
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: external-dns
+  template:
+    metadata:
+      labels:
+        app: external-dns
+    spec:
+      serviceAccountName: externaldns
+      containers:
+        - name: external-dns
+          image: cr.yandex/yc-marketplace/yandex-cloud/externaldns/externaldns1718719319031631828758369101109170292970533212046:0.5.1
+          imagePullPolicy: Always
+          args:
+            - --txt-owner-id=external-dns
+            - --source=service
+            - --source=ingress
+            - --provider=yandex
+            - --yandex-folder=b1gqlm96s1bedr3p9nu1
+            - --yandex-iam-key-file=/etc/kubernetes/iamkeyfile.json
+            - --txt-prefix=external-dns-
+          volumeMounts:
+            - name: yandex-iam-key-file
+              mountPath: /etc/kubernetes
+              readOnly: true
+      volumes:
+        - name: yandex-iam-key-file
+          secret:
+            secretName: externaldns
+            items:
+              - key: iamkeyfile.json
+                path: iamkeyfile.json

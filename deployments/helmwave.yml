@@ -1,0 +1,57 @@
+version: 0.41.1
+
+.options: &options
+  create_namespace: true
+  wait: true
+  timeout: 5m
+  max_history: 3 # best practice
+
+releases:
+
+- name: externaldns
+  namespace: externaldns
+  chart:
+    name: charts/externaldns
+  values:
+    - values/values.dns.yaml    
+  <<: *options
+
+- name: nginx   
+  namespace: default
+  depends_on:
+    - name: externaldns@externaldns  
+  chart:
+    name: charts/nginx
+  values:
+    - values/values.nginx.yaml    
+  <<: *options
+
+- name: cert-manager
+  namespace: cert-manager
+  depends_on:
+    - name: nginx@default  
+  chart:
+    name: charts/cert-manager-webhook-yandex
+  values:
+    - values/values.cert.yaml    
+  <<: *options
+
+- name: wordpress
+  namespace: wordpress
+  depends_on:
+    - name: nginx@default    
+  chart:
+    name: charts/wordpress
+  values:
+    - values/values.wp.yaml    
+  <<: *options
+
+- name: prometheus
+  namespace: prometheus
+  depends_on:
+    - name: cert-manager@cert-manager  
+  chart:
+    name: charts/kube-prometheus-stack
+  values:
+    - values/values.prometheus.yaml    
+  <<: *options

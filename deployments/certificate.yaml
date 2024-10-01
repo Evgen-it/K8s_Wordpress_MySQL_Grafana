@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: filit-fun
+  namespace: cert-manager
+spec:
+  secretName: filit-fun-secret
+  issuerRef:
+    # ClusterIssuer, созданный вместе с Yandex Cloud DNS ACME webhook.
+    name: yc-clusterissuer
+    kind: ClusterIssuer
+  dnsNames:
+    - filit.fun
+    # Домен должен входить в вашу публичную зону Cloud DNS.
+    # Указывается имя домена (например, test.example.com), а не имя DNS-записи.

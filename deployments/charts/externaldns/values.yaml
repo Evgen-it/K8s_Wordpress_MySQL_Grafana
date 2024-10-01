@@ -1,0 +1,9 @@
+config:
+    auth:
+        json: |
+            {}
+    folder_id: string
+image:
+    pullPolicy: Always
+    repository: cr.yandex/yc-marketplace/yandex-cloud/externaldns/externaldns1718719319031631828758369101109170292970533212046
+    tag: 0.5.1

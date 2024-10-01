@@ -1,0 +1,23 @@
+---
+grafana:
+  ingress:
+    ## If true, Grafana Ingress will be created
+    enabled: true
+    ingressClassName: nginx
+    hosts: 
+      - grafana.filit.fun
+  adminPassword: aishooha7Aech7azah6pai4ohbol1t
+  sidecar:
+    dashboards:
+      provider:
+        foldersFromFilesStructure: true
+      searchNamespace: ALL
+  dashboards:
+    default:
+      wordpress:
+            datasource:
+              - name: MYSQL
+                value: mysql
+            gnetId: 13191
+      nginx-ingress:
+        url: https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/grafana/dashboards/nginx.json

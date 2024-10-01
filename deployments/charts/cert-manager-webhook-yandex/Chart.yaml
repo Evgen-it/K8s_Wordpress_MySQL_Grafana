@@ -1,0 +1,17 @@
+name: cert-manager-webhook-yandex
+home: ""
+sources: []
+version: 1.0.8-1
+description: Yandex Cloud DNS cert-manager ACME webhook
+keywords: []
+maintainers: []
+icon: ""
+apiversion: v1
+condition: ""
+tags: ""
+appversion: 1.0.1
+deprecated: false
+annotations: {}
+kubeversion: ""
+dependencies: []
+type: ""

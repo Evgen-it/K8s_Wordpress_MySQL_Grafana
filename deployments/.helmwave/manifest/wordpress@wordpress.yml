@@ -1,0 +1,443 @@
+---
+# Source: wordpress/templates/networkpolicy.yaml
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: wordpress
+      app.kubernetes.io/name: wordpress
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    - {}
+  ingress:
+    - ports:
+        - port: 8080
+        - port: 8443
+---
+# Source: wordpress/templates/pdb.yaml
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: wordpress
+      app.kubernetes.io/name: wordpress
+---
+# Source: wordpress/templates/serviceaccount.yaml
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+automountServiceAccountToken: false
+---
+# Source: wordpress/templates/externaldb-secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wordpress-externaldb
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+type: Opaque
+data:
+  mariadb-password: "MTIzNDU2Nzg="
+---
+# Source: wordpress/templates/secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+type: Opaque
+data:
+  wordpress-password: "c2hpVGVlM2FldyE="
+---
+# Source: wordpress/templates/tls-secrets.yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wp.filit.fun-tls
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+type: kubernetes.io/tls
+data:
+  tls.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURNVENDQWhtZ0F3SUJBZ0lRVjdUVk5GUEYvNjNWUVpLck8ySlhXakFOQmdrcWhraUc5dzBCQVFzRkFEQVgKTVJVd0V3WURWUVFERXd4M2IzSmtjSEpsYzNNdFkyRXdIaGNOTWpReE1EQXhNVEF6TkRBM1doY05NalV4TURBeApNVEF6TkRBM1dqQVhNUlV3RXdZRFZRUURFd3gzY0M1bWFXeHBkQzVtZFc0d2dnRWlNQTBHQ1NxR1NJYjNEUUVCCkFRVUFBNElCRHdBd2dnRUtBb0lCQVFDNHVZTENjaTBqeTVZbW1KYzdaRnplK3NSWUN5WkJoL3FCcGxQNkQ2SUUKWWp0V205aDZ0VEE4TjhnSWtVMmpzTTlWNEc4ekp3dUYrMlY3T0RsYklwUjZDdnF1OUttQzJxdVRWWkR5RTF3agpreEhXbzBDV01qYzVpd3I4SlJaTnpveTZPdEdkWlRYTjZzdjhudVhBUVZqYXVZQmRJNHlsMk5icFE3YkgvY0V6Clk0MGJJQXVuUFhrS3gzd3p5bmZZNGQxL2VxcjVqb21zRUVuaGZYNi9ERWhCMkRBY3NmUHpqTkl0L2NGazR1WmsKM1FudFgzT01ZYVE2bkNQSVl6bFlLdWhkZENWZHN2bnBpRWF6OHAvdGFvU0l4NW9CbUJ1NUVsTldrQU5vNEFXUQpYTVJiUGFyRU5WTGNWZE1HYi9OMnl5UHdzNjhRaTUyYnF1OTJPL3djTUhVRkFnTUJBQUdqZVRCM01BNEdBMVVkCkR3RUIvd1FFQXdJRm9EQWRCZ05WSFNVRUZqQVVCZ2dyQmdFRkJRY0RBUVlJS3dZQkJRVUhBd0l3REFZRFZSMFQKQVFIL0JBSXdBREFmQmdOVkhTTUVHREFXZ0JTLy9ndDh5K3dyVXBhMVJJUjRlaWk0cG42V1d6QVhCZ05WSFJFRQpFREFPZ2d4M2NDNW1hV3hwZEM1bWRXNHdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBQ2lnVGtWK0F4aFhMNUtjCmtQb3dKcG5RTW91VWNPaUZyYmR5V1BlZ3NHQXVBb2VxdGlBaWRyZFN6S1BLM25uckMyK2t3OEpRUmZLdi9VOGIKV0tUWmt2RjJRNmxMc2hlRVZVUXNud1duMUhtRlMzdkVKL1ZocW81TGlDcUhwTUFxUCs4N0Ztd3MxN25PWkFBVgpSY2xtOWtFb2p1ZE5qV05hRmhWYkZjSWw0R1pJR3gzc2ozT21UQ0dPR1J5L2wrM2xPNlBxaDhGMXFOZUlJQ3o5CnVuMXBWaHB6YzdRKzJFK1pLM2JPMUJnZ0NuK1ZNRXNDU1VnY1VVNVl4VndGQ0hjVHlkdjVqZmp3dXdFMDhvMGwKVlpQTE9GRmVZek9kUkdpclYvSEp5VFJUbkFBK05obm4wS2Y3L0RiVE4xY0V5QlF4K0NsRkFHKzA4cUhjYzNBcwpic2FYeGhBPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+  tls.key: LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlFcFFJQkFBS0NBUUVBdUxtQ3duSXRJOHVXSnBpWE8yUmMzdnJFV0FzbVFZZjZnYVpUK2craUJHSTdWcHZZCmVyVXdQRGZJQ0pGTm83RFBWZUJ2TXljTGhmdGxlemc1V3lLVWVncjZydlNwZ3RxcmsxV1E4aE5jSTVNUjFxTkEKbGpJM09Zc0svQ1VXVGM2TXVqclJuV1UxemVyTC9KN2x3RUZZMnJtQVhTT01wZGpXNlVPMngvM0JNMk9OR3lBTApwejE1Q3NkOE04cDMyT0hkZjNxcStZNkpyQkJKNFgxK3Z3eElRZGd3SExIejg0elNMZjNCWk9MbVpOMEo3Vjl6CmpHR2tPcHdqeUdNNVdDcm9YWFFsWGJMNTZZaEdzL0tmN1dxRWlNZWFBWmdidVJKVFZwQURhT0FGa0Z6RVd6MnEKeERWUzNGWFRCbS96ZHNzajhMT3ZFSXVkbTZydmRqdjhIREIxQlFJREFRQUJBb0lCQVFDc0ZJeWVEUFRHQXJKbQpWQUdWMzBHd3FwUmJuRTlQL3BjN1RiR3ZJZjhBN0cxd21nK0pCOTdlU2V4N0pyalh3eTd5UmZmeEErOTFLYUw0CnJZQ295RWJlaGZuUEg3WUZZeVV3UkNhWmk3VnFvbWVjdGtuRllSUVc4OU1RM28rdmZibVZCcFFjZHBzdnJ3bkYKMUZRY3pBTTFCbGR3N0Z2cVoxeVV3bkswVFV3OFRHdnJtZy9uenB4MUJJdEFBeEtmSFNDWjFXc1lqb0JiN2hKeQpYUmV4ekx2cEdONUQ1bUVOa0duUWlzTm9pSEE5WWZ0Z0RQSjcwZnJCZnNSQUtVbnM0NHZjeTh5WWJHUlRWUGQrClpEYUZ1blBMZUxoOTBoRXB5cFhNZEtjbGdKS1VuVndOb25MUS9Fd29SSVFwWS9EQlhtRG1tTmp6UG95VUVmN3UKT3U5S2lrbUJBb0dCQU0yWVJXZE10dllKc1JML1E2NzhuOXBnR094YjVuaDA5MUUwTzZ4cUszcGNEMTdsVkQ1NwpWd0EwMVBQbUZJV3JnTGRnaTJoMUJoWW9BZ3dDSFVhaEc4bkgra3JzVS9mTnc3dE9ISThoSEQ5ZE1MOWgzV1RwCm10R2VaRENYMFkvQlVLWGF0cDVTMzcxdHJQRi9lekNONlowN20wNTlXT2tBOVlTaFI4bk9IalloQW9HQkFPWUQKWGlqN080R3ZXRkdjb0R3YUM4TDJYUnR3OEFQSlo4a1dEazdHS1FaMis5MHEvQ2RtUS9pQlFxWmdKblA5Q3RwKwplQ2pLOG1sd1VXOFQycFdyeTBxQ3RXVXpHaGdDd3l0OU03ZWQ5RHhIN2RhVlp6K0xHeHRUT3U3dWRlS3daQmdkCnBqK1pIbnJtUUdhb2NFRlJLM3dwWEkrU2VZaXBPU0ZoN2l4QWpkcGxBb0dCQUx6Q0V1WjJqbnh5Qlh0VmxjU3cKOStxODArVWRzd25oQ2JncVpxY3ppdHQ2YmpwSC93S21wd2Z2ZVp5OEh4ZGlrSGpNVVBJRWp5UUVjMnltL0UzKwpXTTczcFpyb1EyZCtLVGhzek5lMEpJVWdnRU1XRFBnN2FnTU9reG55S1ZyOHQ1aXVwMy9Rd3M3ZVJTd3NTT1FaClJ1VXU5clluYTF2eG4zaTN3bnRMbkgxQkFvR0JBSWY3YTdwOHRQUjVqcFJKTGEzNmxBT0NGUTk1R0Z5VXdLZncKUXlzdEdlbjVnL09BU3l5YjJBbGRtZUswcTJjZExVSjVURjZKaFFEeTV5SHRNZWdVZFk0cWNrVlBEZGt1SU9aZwpFYWczV01JZW9DeWhqVFhTN29hY0VSWmFvaFVQeFUxQWtoMjlUM2pIRVVIZnlPWEVzQm1xZGs5bkFEVGNIcXR1CnN4azBYT2pGQW9HQU5IczJSc2NKVVNqd0ZZdmhFYmpVR3FOaFE4a1VRZ2ZzMHZwNmQrR0hHK094dWdTMXNLY2sKcWpIYnVKdDhTQWNBSjBHbTRicS9WSHEwWWUyblQ5MG0zV3h2VjhsampZSjJlKzZhbGREZ1prZGFSVGpOajRvQQpLNm9YSm5ZNDUzbFVEY0lxRnFlaHB4RC9ua1FpQmpwZVQ2eHRFS0RaTlkvNTlIUXU1MWRnSGhRPQotLS0tLUVORCBSU0EgUFJJVkFURSBLRVktLS0tLQo=
+  ca.crt: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURHakNDQWdLZ0F3SUJBZ0lSQUxiRTMxMWxDajJ2MzNBVE1ac1NJNlF3RFFZSktvWklodmNOQVFFTEJRQXcKRnpFVk1CTUdBMVVFQXhNTWQyOXlaSEJ5WlhOekxXTmhNQjRYRFRJME1UQXdNVEV3TXpRd04xb1hEVEkxTVRBdwpNVEV3TXpRd04xb3dGekVWTUJNR0ExVUVBeE1NZDI5eVpIQnlaWE56TFdOaE1JSUJJakFOQmdrcWhraUc5dzBCCkFRRUZBQU9DQVE4QU1JSUJDZ0tDQVFFQThGUTBMNG1lOEthYlYwamMrOCtEM21BbFZLT1RyZ2FrKzJtQ3JWWWUKeUxGNmdhNFZBTWtiZUtlSy9Ud1RSbDhYcjFneEdtYk96c0xKc010b1lRQVdSTVVBUmFabzAwTjFOa3piVEJGTwo4KzJBWDk4WUxSaXBwbFgrTENoZ2doSE1XamhpYzlOdVZGMGhJRzgrWGMxOXA2T1pFbFhyU3p6TGFvcHprOCtKCkwwTkw2ZWVuYVJ4a2tiRnpFTkdyNUhlSkcxdUN6UlliazFWdkpxWVA5NnQ2NGZHQW50c1Q5SzhCamNpMTgzOGUKcVBiQWVKQ3E4WDd6ZXd1RnN6T2dyd0YzMUpWNFRMeHJpaTh6SEVzTGhEcllseDBGclN6VWpVM3RNU3hISFRrdwpUOTY5VXNZUjVDVEFTTUkvR1AwS0pHZmk0ZEozeUpPOWJORjd3aVR1ZTdvbUxRSURBUUFCbzJFd1h6QU9CZ05WCkhROEJBZjhFQkFNQ0FxUXdIUVlEVlIwbEJCWXdGQVlJS3dZQkJRVUhBd0VHQ0NzR0FRVUZCd01DTUE4R0ExVWQKRXdFQi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZMLytDM3pMN0N0U2xyVkVoSGg2S0xpbWZwWmJNQTBHQ1NxRwpTSWIzRFFFQkN3VUFBNElCQVFCRGhsL1dTdjFsZEROSXk2UWpCMTdTQkt0bml5NlZHSHhqSVQ5RksySVI1ZUJ2CjUydFQzd09TQ0ZNNkg3ZUVRaURmVzhaWU1FM2xBS2NRNmdsZzgwWHRQazNtemJHbUEwcjBpTUVYUUhDczNSVjIKemt1NGdOUkNHQ3lmdzk5QzFSVzBVVGx4b2ZaT2R0V1p5RTZvVHR0eTV1YXFKSVpLRnlSL1crd3BMMXZJMUdLRwpXcktvTVhkWlJxb0pFL0ZQNTFpUldPZ2o2NDJZbGxjbUp5NmtETHZVbk15a29FdUY2azdJbVIwR0lHU29DR2xlCmRybmpBVzl0VWwvUW50S3RLQXU1Ny9YWHlHbTNvZUJxUThObHFCc2g2Y09nVmxyOUpESitVdml5WVA0a1BpSzkKNjhqZVA0ZGpITU95L3E0REVHYmpXVWxoSEl3ZWRVb1JjZjU2L3ptdwotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+---
+# Source: wordpress/templates/pvc.yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "10Gi"
+---
+# Source: wordpress/templates/svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+spec:
+  type: NodePort
+  externalTrafficPolicy: "Cluster"
+  sessionAffinity: None
+  ports:
+    - name: http
+      port: 80
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: https
+  selector:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/name: wordpress
+---
+# Source: wordpress/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: wordpress
+      app.kubernetes.io/name: wordpress
+  strategy:
+    type: RollingUpdate
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: wordpress
+        app.kubernetes.io/managed-by: Helm
+        app.kubernetes.io/name: wordpress
+        app.kubernetes.io/version: 6.6.2
+        helm.sh/chart: wordpress-23.1.16
+    spec:
+      
+      automountServiceAccountToken: false
+      # yamllint disable rule:indentation
+      hostAliases:
+        - hostnames:
+          - status.localhost
+          ip: 127.0.0.1
+      # yamllint enable rule:indentation
+      affinity:
+        podAffinity:
+          
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/instance: wordpress
+                    app.kubernetes.io/name: wordpress
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+        nodeAffinity:
+          
+      securityContext:
+        fsGroup: 1001
+        fsGroupChangePolicy: Always
+        supplementalGroups: []
+        sysctls: []
+      serviceAccountName: wordpress
+      initContainers:
+        - name: prepare-base-dir
+          image: docker.io/bitnami/wordpress:6.6.2-debian-12-r4
+          imagePullPolicy: "IfNotPresent"
+          resources:
+            limits:
+              cpu: 375m
+              ephemeral-storage: 2Gi
+              memory: 384Mi
+            requests:
+              cpu: 250m
+              ephemeral-storage: 50Mi
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          command:
+            - /bin/bash
+          args:
+            - -ec
+            - |
+              #!/bin/bash
+
+              . /opt/bitnami/scripts/liblog.sh
+              . /opt/bitnami/scripts/libfs.sh
+
+              info "Copying base dir to empty dir"
+              # In order to not break the application functionality (such as upgrades or plugins) we need
+              # to make the base directory writable, so we need to copy it to an empty dir volume
+              cp -r --preserve=mode /opt/bitnami/wordpress /emptydir/app-base-dir
+
+              info "Copying symlinks to stdout/stderr"
+              # We copy the logs folder because it has symlinks to stdout and stderr
+              if ! is_dir_empty /opt/bitnami/apache/logs; then
+                cp -r /opt/bitnami/apache/logs /emptydir/apache-logs-dir
+              fi
+
+              info "Copying default PHP config"
+              cp -r --preserve=mode /opt/bitnami/php/etc /emptydir/php-conf-dir
+
+              info "Copying php var directory"
+              if ! is_dir_empty /opt/bitnami/php/var; then
+                cp -r /opt/bitnami/php/var /emptydir/php-var-dir
+              fi
+
+              info "Copy operation completed"
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /emptydir
+      containers:
+        - name: wordpress
+          image: docker.io/bitnami/wordpress:6.6.2-debian-12-r4
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsGroup: 1001
+            runAsNonRoot: true
+            runAsUser: 1001
+            seLinuxOptions: {}
+            seccompProfile:
+              type: RuntimeDefault
+          env:
+            - name: BITNAMI_DEBUG
+              value: "false"
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "yes"
+            - name: WORDPRESS_SKIP_BOOTSTRAP
+              value: "no"
+            - name: MARIADB_HOST
+              value: "rc1a-vz8xzmrv7oxeo6wn.mdb.yandexcloud.net"
+            - name: MARIADB_PORT_NUMBER
+              value: "3306"
+            - name: WORDPRESS_DATABASE_NAME
+              value: "one_of_one"
+            - name: WORDPRESS_DATABASE_USER
+              value: "evgen"
+            - name: WORDPRESS_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wordpress-externaldb
+                  key: mariadb-password
+            - name: WORDPRESS_USERNAME
+              value: "user"
+            - name: WORDPRESS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: wordpress
+                  key: wordpress-password
+            - name: WORDPRESS_EMAIL
+              value: "user@example.com"
+            - name: WORDPRESS_FIRST_NAME
+              value: "FirstName"
+            - name: WORDPRESS_LAST_NAME
+              value: "LastName"
+            - name: WORDPRESS_HTACCESS_OVERRIDE_NONE
+              value: "no"
+            - name: WORDPRESS_ENABLE_HTACCESS_PERSISTENCE
+              value: "no"
+            - name: WORDPRESS_BLOG_NAME
+              value: "User's Blog!"
+            - name: WORDPRESS_TABLE_PREFIX
+              value: "wp_"
+            - name: WORDPRESS_SCHEME
+              value: "https"
+            - name: WORDPRESS_EXTRA_WP_CONFIG_CONTENT
+              value: ""
+            - name: WORDPRESS_PLUGINS
+              value: "none"
+            - name: WORDPRESS_OVERRIDE_DATABASE_SETTINGS
+              value: "no"
+            - name: APACHE_HTTP_PORT_NUMBER
+              value: "8080"
+            - name: APACHE_HTTPS_PORT_NUMBER
+              value: "8443"
+          envFrom:
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+          livenessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 120
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: http
+            timeoutSeconds: 5
+          readinessProbe:
+            failureThreshold: 6
+            httpGet:
+              httpHeaders: []
+              path: /wp-login.php
+              port: 'https'
+              scheme: 'HTTPS'
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            limits:
+              cpu: 375m
+              ephemeral-storage: 2Gi
+              memory: 384Mi
+            requests:
+              cpu: 250m
+              ephemeral-storage: 50Mi
+              memory: 256Mi
+          volumeMounts:
+            - name: empty-dir
+              mountPath: /opt/bitnami/apache/conf
+              subPath: apache-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/apache/logs
+              subPath: apache-logs-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/apache/var/run
+              subPath: apache-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/php/etc
+              subPath: php-conf-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/php/tmp
+              subPath: php-tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/php/var
+              subPath: php-var-dir
+            - name: empty-dir
+              mountPath: /tmp
+              subPath: tmp-dir
+            - name: empty-dir
+              mountPath: /opt/bitnami/wordpress
+              subPath: app-base-dir
+            - mountPath: /bitnami/wordpress
+              name: wordpress-data
+              subPath: wordpress
+      volumes:
+        - name: empty-dir
+          emptyDir: {}
+        - name: wordpress-data
+          persistentVolumeClaim:
+            claimName: wordpress
+---
+# Source: wordpress/templates/ingress.yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: wordpress
+  namespace: "wordpress"
+  labels:
+    app.kubernetes.io/instance: wordpress
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: wordpress
+    app.kubernetes.io/version: 6.6.2
+    helm.sh/chart: wordpress-23.1.16
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: "wp.filit.fun"
+      http:
+        paths:
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: wordpress
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - "wp.filit.fun"
+      secretName: wp.filit.fun-tls
